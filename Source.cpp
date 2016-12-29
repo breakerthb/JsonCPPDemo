@@ -44,6 +44,7 @@ int JsonWrite()
 	person["age"] = 23;
 	root.append(person);
 
+	//string json_file = root.toStyledString();
 	string json_file = writer.write(root);
 
 	ofstream ofs;
