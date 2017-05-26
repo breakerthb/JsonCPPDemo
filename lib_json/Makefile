@@ -1,36 +1,48 @@
-# Which Compiler
-CC=g++ 
+######################################
+#
+#
+######################################
 
-# Debug option
-CFLAGS=-g -c -Wall
-# Release option
-#CFLAGS=-O -c -Wall
-CFLAGS+=-std=c++11
+# Target File
+# lib*.so
+TARGET  := libJsonTest.so
 
-#DEFINE=-DUNICODE -D_LINUX_ 
-
+# Compile Files
 #ALL_CPP=$(shell ls ./*.cpp)
 ALL_CPP=$(wildcard *.cpp)
 ALL_HPP=-I ../include
 
-SOURCES=$(ALL_CPP)
-INCDIR=$(ALL_HPP)
+#compile and lib parameter
+#编译参数
+CC      := g++
+LIBS    :=
+LDFLAGS :=
+DEFINES := -DHAVE_CONFIG_H
+INCLUDE := $(ALL_HPP)
+CFLAGS  := -g -Wall -O3 $(DEFINES) $(INCLUDE)
+CXXFLAGS:= $(CFLAGS) -std=c++11
+SHARE   := -fPIC -shared -o
 
+# Debug option
+#CFLAGS=-g -c -Wall
+# Release option
+#CFLAGS=-O -c -Wall
+
+SOURCE  := $(ALL_CPP)
 # Replace SOURCES '.cpp' -> '.o'
 OBJS=$(SOURCES:.cpp=.o)
 
-TARGET=libjsoncpp.so
+.PHONY : all clean
 
-all:$(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(INCDIR) $^ -o $@ -shared
-
+all: $(TARGET)
+ 
+$(TARGET):$(OBJS)
+	$(CC) $(CXXFLAGS) $(SHARE) $@ $(OBJS) $(LDFLAGS) $(LIBS)
+	echo $(OBJS)
+	
 %.o: %.cpp
-	$(CC) $(INCDIR) -fPIC -c -o $@ $^
-	echo $(ALL_CPP)
-.cc.o:
-	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
+	$(CC) $(CXXFLAGS) -fPIC -c -o $@ $^
+	echo $(OBJS)
 
 clean:
 	rm -f $(OBJS) *~ $(TARGET) core
