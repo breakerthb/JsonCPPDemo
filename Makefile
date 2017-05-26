@@ -1,14 +1,7 @@
-# Which Compiler
-CC=g++ 
-
-# Debug option
-CFLAGS=-g -c -Wall
-# Release option
-#CFLAGS=-O -c -Wall
-CFLAGS+=-std=c++11
-
-#DEFINE=-DUNICODE -D_LINUX_ 
-
+######################################
+#
+######################################
+#source file
 #ALL_CPP=$(shell ls ./*.cpp)
 ALL_CPP=$(wildcard *.cpp)
 ALL_HPP=-I ./include
@@ -16,24 +9,32 @@ ALL_HPP=-I ./include
 SOURCES=$(ALL_CPP)
 INCDIR=$(ALL_HPP)
 
-# Replace SOURCES '.cpp' -> '.o'
-OBJS=$(SOURCES:.cpp=.o)
-
-# Libs
-LIB_PATH=lib_json
-
-TARGET=JsonTest
+OBJS=$(SOURCES:.cpp=.o) # Replace SOURCES '.cpp' -> '.o'
+  
+# Target File
+TARGET  := JsonTest
+  
+# Compile and lib
+CC      := g++
+LIBPATH := StaticLib #DynamicLib
+LIBS    := -ljsoncpp
+LDFLAGS :=
+DEFINES := -DUNICODE
+INCLUDE := $(ALL_HPP)
+CFLAGS  := -g -c -Wall $(DEFINES) $(INCLUDE) # Debug option
+#CFLAGS  := -O -c -Wall $(DEFINES) $(INCLUDE) # Release option
+CXXFLAGS:= $(CFLAGS) -DHAVE_CONFIG_H
 
 all:$(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(INCDIR) $^ -o $@ -L$(LIB_PATH) -ljsoncpp -Wl,-rpath=$(LIB_PATH)
+	$(CC) $(INCLUDE) $^ -o $@ -L$(LIBPATH) $(LIBS) -Wl,-rpath=$(LIBPATH)
 
 %.o: %.cpp
-	$(CC) $(INCDIR) -fPIC -c -o $@ $^
+	$(CC) $(INCLUDE) -fPIC -c -o $@ $^
 	
 .cc.o:
-	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
+	$(CC) $(CFLAGS) $(DEFINE) $(INCLUDE) -c $<
 
 clean:
 	rm -f $(OBJS) *~ $(TARGET) core
