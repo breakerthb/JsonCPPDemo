@@ -29,8 +29,8 @@ $(TARGET): $(OBJS)
 %.o: %.cpp
 	$(CC) $(INCDIR) -fPIC -c -o $@ $^
 	echo $(ALL_CPP)
-.cc.o:
-	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
+#.cc.o:
+#	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
 
 clean:
 	rm -f $(OBJS) *~ $(TARGET) core
