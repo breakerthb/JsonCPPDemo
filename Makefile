@@ -28,7 +28,7 @@ CXXFLAGS:= $(CFLAGS) -DHAVE_CONFIG_H
 all:$(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(INCLUDE) $^ -o $@ -L$(LIBPATH) $(LIBS) -Wl,-rpath=$(LIBPATH)
+	$(CC) $(INCLUDE) $^ -o $@ -L$(LIBPATH) $(LIBS) -Wl,-rpath=$(LIBPATH) #Link Dynamic Lib Need
 
 %.o: %.cpp
 	$(CC) $(INCLUDE) -fPIC -c -o $@ $^
