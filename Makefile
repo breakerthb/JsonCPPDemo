@@ -20,10 +20,7 @@ install: uninstall all
 uninstall:
 	rm -fr $(INSTALLDIR)
 
-#lint:
-#	@(for d in $(SUBDIRS); do make -C $$d lint; done)
-
 clean:
 	@(for d in $(SUBDIRS); do make -C $$d clean; done)
 
-.PHONY: all install uninstall lint clean $(SUBDIRS)
+.PHONY: all install uninstall clean $(SUBDIRS)
