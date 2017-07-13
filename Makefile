@@ -1,39 +1,29 @@
-# Which Compiler
-CC=g++ 
+include Makefile.def
 
-# Debug option
-CFLAGS=-g -c -Wall
-# Release option
-#CFLAGS=-O -c -Wall
-CFLAGS+=-std=c++11
+INSTALLDIR ?= ./install
 
-#DEFINE=-DUNICODE -D_LINUX_ 
+SUBDIRS := lib_json execute
 
-#ALL_CPP=$(shell ls ./*.cpp)
-ALL_CPP=$(wildcard *.cpp)
-ALL_HPP=-I ./include
+#ifneq (,$(MONGODIR))
+#SUBDIRS += mongo
+#endif
 
-SOURCES=$(ALL_CPP)
-INCDIR=$(ALL_HPP)
+all: $(SUBDIRS)
 
-# Replace SOURCES '.cpp' -> '.o'
-OBJS=$(SOURCES:.cpp=.o)
+$(SUBDIRS):
+	make -C $@
 
-# Libs
-LIB_PATH=lib_json
+install: uninstall all
+	mkdir -p $(INSTALLDIR) 
+	mv JsonTest $(INSTALLDIR)
 
-TARGET=JsonTest
+uninstall:
+	rm -fr $(INSTALLDIR)
 
-all:$(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(INCDIR) $^ -o $@ -L$(LIB_PATH) -ljsoncpp -Wl,-rpath=$(LIB_PATH)
-
-%.o: %.cpp
-	$(CC) $(INCDIR) -fPIC -c -o $@ $^
-	
-.cc.o:
-	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
+#lint:
+#	@(for d in $(SUBDIRS); do make -C $$d lint; done)
 
 clean:
-	rm -f $(OBJS) *~ $(TARGET) core
+	@(for d in $(SUBDIRS); do make -C $$d clean; done)
+
+.PHONY: all install uninstall lint clean $(SUBDIRS)

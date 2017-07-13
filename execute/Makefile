@@ -12,18 +12,21 @@ INCDIR=$(ALL_HPP)
 # Replace SOURCES '.cpp' -> '.o'
 OBJS=$(SOURCES:.cpp=.o)
 
-TARGET=../libjsoncpp.so
+# Libs
+LIB_PATH=../
+
+TARGET=../JsonTest
 
 all:$(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(INCDIR) $^ -o $@ -shared
+	$(CC) $(INCDIR) $^ -o $@ -L$(LIB_PATH) -ljsoncpp -Wl,-rpath=$(LIB_PATH)
 
 %.o: %.cpp
 	$(CC) $(INCDIR) -fPIC -c -o $@ $^
-	echo $(ALL_CPP)
-#.cc.o:
-#	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
+	
+.cc.o:
+	$(CC) $(CFLAGS) $(DEFINE) $(INCDIR) -c $<
 
 clean:
 	rm -f $(OBJS) *~ $(TARGET) core

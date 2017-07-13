@@ -1,0 +1,8 @@
+# Which Compiler
+CC=g++ 
+
+# Debug option
+CFLAGS=-g -c -Wall
+# Release option
+#CFLAGS=-O -c -Wall
+CFLAGS+=-std=c++11
